@@ -12,9 +12,11 @@ Pick any one and it becomes the stat shown in the bar.
  ┌─────────────────────────────┐
  │ ✓ RAM      42%  ·  6.8/16 GB │   ← click a row to promote it to the bar
  │   CPU      18%  ·  10 cores  │
+ │   GPU      0%  · tiler 0%    │
  │   Temp     47°C avg · 52 pk  │
  │   Disk     63%  ·  620/994GB │
  │   Network  ↓1.2 MB/s ↑0.3 MB │
+ │   FPS      120 · display     │
  │  ───────────────────────────│
  │   Update Interval         ▸  │
  │   Launch at Login            │
@@ -30,9 +32,11 @@ Pick any one and it becomes the stat shown in the bar.
 |---------|--------|-------|
 | RAM     | `host_statistics64` | Matches Activity Monitor's "Memory Used" (app + wired + compressed). |
 | CPU     | `host_processor_info` | Total busy %, averaged across logical cores. |
+| GPU     | IORegistry (`IOAccelerator`) | "Device Utilization %" with tiler/renderer breakdown. |
 | Temp    | AppleSMC | Averages discovered CPU sensors. Falls back to the OS thermal-pressure state when the SMC exposes no readable sensor. |
 | Disk    | URL volume capacity | Used % of the boot volume. |
-| Network | `getifaddrs` | Down/up throughput across non-loopback interfaces. |
+| Network | `getifaddrs` | Down/up throughput; fixed-width `K/M/G/T` so the slot never jitters. |
+| FPS     | `CVDisplayLink` | Frames presented per second on the main display — its live refresh rate (e.g. 60 or 120), not any single app's render rate. |
 
 All readings use documented macOS APIs — no private frameworks, no helper
 daemon, no network access.
@@ -81,7 +85,7 @@ Sources/OnTop/
 
 ## Roadmap
 
-- Richer Apple Silicon sensors (GPU/efficiency cores, power draw via IOReport)
+- Power draw (CPU/GPU watts) and efficiency-core temps via IOReport
 - Per-core CPU breakdown and small inline sparklines in the bar
 - Swap, memory-pressure, and load-average readers
 - Preferences window (which stats appear, units, colors)

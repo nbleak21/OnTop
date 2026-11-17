@@ -23,9 +23,11 @@ final class StatusController: NSObject, NSMenuDelegate {
         readers = [
             MemoryReader(),
             CPUReader(),
+            GPUReader(),
             TemperatureReader(),
             DiskReader(),
             NetworkReader(),
+            FPSReader(),
         ]
         primaryID = defaults.string(forKey: "primaryID") ?? "ram"
         let saved = defaults.double(forKey: "interval")
