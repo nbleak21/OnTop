@@ -24,6 +24,7 @@ final class StatusController: NSObject, NSMenuDelegate {
             MemoryReader(),
             CPUReader(),
             GPUReader(),
+            PowerReader(),
             TemperatureReader(),
             DiskReader(),
             NetworkReader(),

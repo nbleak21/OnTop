@@ -171,9 +171,26 @@ final class SMC {
         return nil
     }
 
+    /// Decode a float ("flt ") key to a Double.
+    func readFloat(_ key: UInt32) -> Double? {
+        guard let (bytes, type) = readRaw(key), type == fourCC("flt ") else { return nil }
+        let bits = UInt32(bytes.0) | UInt32(bytes.1) << 8 | UInt32(bytes.2) << 16 | UInt32(bytes.3) << 24
+        return Double(Float(bitPattern: bits))
+    }
+
     /// Enumerate all keys and return those that read back as plausible
     /// temperatures (0–120 °C), paired with their current value.
     func discoverTemperatureKeys() -> [(key: String, value: Double)] {
+        discover(prefix: "T", low: 0, high: 120) { readTemperature($0) }
+    }
+
+    /// Enumerate all keys and return the "P" (power, watts) float sensors.
+    func discoverPowerKeys() -> [(key: String, value: Double)] {
+        discover(prefix: "P", low: 0.001, high: 2000) { readFloat($0) }
+    }
+
+    private func discover(prefix: String, low: Double, high: Double,
+                          read: (UInt32) -> Double?) -> [(key: String, value: Double)] {
         guard open() else { return [] }
         var found: [(String, Double)] = []
         let count = keyCount()
@@ -181,8 +198,8 @@ final class SMC {
         for index in 0..<count {
             guard let code = key(at: index) else { continue }
             let name = fourCCString(code)
-            guard name.hasPrefix("T") else { continue }
-            if let value = readTemperature(code), value > 0, value < 120 {
+            guard name.hasPrefix(prefix) else { continue }
+            if let value = read(code), value > low, value < high {
                 found.append((name, value))
             }
         }
