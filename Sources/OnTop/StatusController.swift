@@ -77,7 +77,9 @@ final class StatusController: NSObject, NSMenuDelegate {
         image?.isTemplate = true
         button.image = image
 
-        let font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
+        // Fully monospaced so digits, padding spaces, and unit letters are all
+        // the same width — the menu-bar slot never jitters as values change.
+        let font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         button.attributedTitle = NSAttributedString(
             string: " " + reading.barText,
             attributes: [.font: font]

@@ -31,7 +31,7 @@ final class NetworkReader: StatReader {
         primed = true
 
         return StatReading(
-            barText: "↓\(Fmt.rateCompact(downRate)) ↑\(Fmt.rateCompact(upRate))",
+            barText: "↓\(Fmt.rateFixed(downRate)) ↑\(Fmt.rateFixed(upRate))",
             menuValue: "↓ \(Fmt.rate(downRate))   ↑ \(Fmt.rate(upRate))"
         )
     }

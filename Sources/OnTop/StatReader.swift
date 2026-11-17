@@ -29,11 +29,19 @@ enum Fmt {
         return String(format: "%.1f %@/s", value, unit)
     }
 
-    /// Compact byte rate for the tight menu-bar slot, e.g. "1.2M".
-    static func rateCompact(_ bytesPerSec: Double) -> String {
-        let (value, unit) = scale(bytesPerSec)
-        let letter = unit.first.map(String.init) ?? ""
-        return String(format: "%.1f%@", value, letter == "B" ? "" : letter)
+    /// Fixed-width byte rate for the menu-bar slot: a right-justified 3-digit
+    /// number plus a single K/M/G/T unit, zero decimals. The width never
+    /// changes (pair with a monospaced font). Under 1 KB/s reads as "0K".
+    static func rateFixed(_ bytesPerSec: Double) -> String {
+        let units = ["K", "M", "G", "T"]
+        var value = max(bytesPerSec, 0) / 1024  // express in KB/s and up
+        var index = 0
+        while value >= 999.5 && index < units.count - 1 {
+            value /= 1024
+            index += 1
+        }
+        let whole = min(Int(value.rounded()), 999)
+        return String(format: "%3d%@", whole, units[index])
     }
 
     private static func scale(_ bytes: Double) -> (Double, String) {
