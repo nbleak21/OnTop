@@ -3,7 +3,7 @@ BUILD_DIR  = .build/release
 APP_BUNDLE = $(APP_NAME).app
 CONTENTS   = $(APP_BUNDLE)/Contents
 
-.PHONY: all build app run sensors install uninstall clean
+.PHONY: all build app run sensors icon install uninstall clean
 
 all: app
 
@@ -11,13 +11,21 @@ all: app
 build:
 	swift build -c release
 
-## Assemble OnTop.app around the binary + Info.plist.
+## Regenerate the app icon (Resources/AppIcon.icns) from Tools/make_icon.swift.
+icon:
+	mkdir -p build
+	swift Tools/make_icon.swift build/AppIcon.iconset
+	iconutil -c icns build/AppIcon.iconset -o Resources/AppIcon.icns
+	@echo "Wrote Resources/AppIcon.icns"
+
+## Assemble OnTop.app around the binary + Info.plist + icon.
 app: build
 	rm -rf $(APP_BUNDLE)
 	mkdir -p $(CONTENTS)/MacOS
 	mkdir -p $(CONTENTS)/Resources
 	cp $(BUILD_DIR)/$(APP_NAME) $(CONTENTS)/MacOS/$(APP_NAME)
 	cp Resources/Info.plist $(CONTENTS)/Info.plist
+	cp Resources/AppIcon.icns $(CONTENTS)/Resources/AppIcon.icns
 	@echo "Built ./$(APP_BUNDLE)"
 
 ## Launch the assembled app.

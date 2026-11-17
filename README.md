@@ -46,7 +46,12 @@ make run        # build OnTop.app and launch it
 make app        # just build ./OnTop.app
 make install    # copy OnTop.app into /Applications
 make sensors    # list the SMC temperature sensors on this machine
+make icon       # regenerate Resources/AppIcon.icns from Tools/make_icon.swift
 ```
+
+The app icon is drawn from code (`Tools/make_icon.swift`, CoreGraphics) — four
+ascending bars in a green→red utilization gradient on a dark tile. Tweak the
+colors or shapes there and run `make icon` to regenerate.
 
 To quit, use **Quit OnTop** in the dropdown (⌘Q while it's open).
 
