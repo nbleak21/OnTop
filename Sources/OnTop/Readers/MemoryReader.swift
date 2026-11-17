@@ -37,9 +37,13 @@ final class MemoryReader: StatReader {
 
         let pct = totalBytes > 0 ? (used / totalBytes) * 100 : 0
         let gb = 1024.0 * 1024.0 * 1024.0
+        let usedGB = Int((used / gb).rounded())
+        let totalGB = Int((totalBytes / gb).rounded())
+        // Right-justify "used" to the total's digit width so the slot stays put.
+        let width = String(totalGB).count
         return StatReading(
-            barText: String(format: "%3.0f%%", pct),
-            menuValue: String(format: "%.0f%%  ·  %.1f / %.0f GB", pct, used / gb, totalBytes / gb)
+            barText: String(format: "%\(width)d/%d GB", usedGB, totalGB),
+            menuValue: String(format: "%.1f / %.0f GB  ·  %.0f%%", used / gb, totalBytes / gb, pct)
         )
     }
 }

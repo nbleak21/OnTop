@@ -8,9 +8,9 @@ One stat rides in the menu bar. Click it and a dropdown shows the rest, live.
 Pick any one and it becomes the stat shown in the bar.
 
 ```
-  ▓ 42%                 ← menu-bar slot (RAM by default)
+  ▓ 12/128 GB           ← menu-bar slot (RAM by default)
  ┌─────────────────────────────┐
- │ ✓ RAM      42%  ·  6.8/16 GB │   ← click a row to promote it to the bar
+ │ ✓ RAM      12/128 GB · 42%  │   ← click a row to promote it to the bar
  │   CPU      18%  ·  10 cores  │
  │   GPU      0%  · tiler 0%    │
  │   Power    11 W · system     │
