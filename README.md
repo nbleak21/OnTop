@@ -52,12 +52,66 @@ make run        # build OnTop.app and launch it
 make app        # just build ./OnTop.app
 make install    # copy OnTop.app into /Applications
 make sensors    # list the SMC temperature sensors on this machine
+make power      # list the SMC power sensors (for porting to a new model)
+make universal  # build a fat arm64 + x86_64 app for distribution
 make icon       # regenerate Resources/AppIcon.icns from Tools/make_icon.swift
 ```
 
 The app icon is drawn from code (`Tools/make_icon.swift`, CoreGraphics) — four
 ascending bars in a green→red utilization gradient on a dark tile. Tweak the
 colors or shapes there and run `make icon` to regenerate.
+
+## Running on another Mac
+
+OnTop uses only documented, user-space APIs — reading the SMC and IORegistry
+needs no entitlement, helper, or `sudo` — so the real questions are *building*
+and *Gatekeeper*.
+
+**Easiest — build it on that Mac (no signing needed):**
+
+```sh
+xcode-select --install     # once, if you don't have the Swift toolchain
+git clone <repo> && cd OnTop && make run
+```
+
+**Copy the prebuilt app:** macOS quarantines apps from unidentified developers.
+After copying `OnTop.app` over, open it once with right-click → Open, or clear
+the quarantine flag:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/OnTop.app
+```
+
+**Distribute it properly (opens with no warnings anywhere):** needs an Apple
+Developer account and a Developer ID certificate.
+
+```sh
+make universal   # fat binary: runs on Apple Silicon AND Intel
+codesign --deep --force --options runtime \
+    --sign "Developer ID Application: NAME (TEAMID)" OnTop.app
+ditto -c -k --keepParent OnTop.app OnTop.zip
+xcrun notarytool submit OnTop.zip --apple-id you@example.com --team-id TEAMID --wait
+xcrun stapler staple OnTop.app
+```
+
+### Hardware differences
+
+Seven of the eight stats are already model-agnostic: RAM, CPU, Disk, Network,
+and FPS use portable APIs; GPU matches any `AGXAccelerator`; and Temp
+*discovers* its sensor keys at runtime, so it adapts to each chip.
+
+**Power is the one model-specific stat.** The total-draw SMC key differs per
+machine (`PowerReader` tries `PSTR` → `PDTR` → `PD0R`). On a new Mac, run:
+
+```sh
+make power          # note the idle values
+# …put the machine under load, then run it again…
+make power          # the total-system key is the one that climbed the most
+```
+
+Add that key to `candidates` in `Sources/OnTop/Readers/PowerReader.swift` if it
+isn't already listed. If none resolve, Power simply shows "—" and the other
+seven stats are unaffected.
 
 To quit, use **Quit OnTop** in the dropdown (⌘Q while it's open).
 

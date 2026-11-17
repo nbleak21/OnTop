@@ -3,7 +3,7 @@ BUILD_DIR  = .build/release
 APP_BUNDLE = $(APP_NAME).app
 CONTENTS   = $(APP_BUNDLE)/Contents
 
-.PHONY: all build app run sensors icon install uninstall clean
+.PHONY: all build app universal run sensors power icon install uninstall clean
 
 all: app
 
@@ -28,6 +28,17 @@ app: build
 	cp Resources/AppIcon.icns $(CONTENTS)/Resources/AppIcon.icns
 	@echo "Built ./$(APP_BUNDLE)"
 
+## Build a universal (arm64 + x86_64) app that runs on any Mac.
+universal:
+	swift build -c release --arch arm64 --arch x86_64
+	@BIN=$$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path); \
+	rm -rf $(APP_BUNDLE); \
+	mkdir -p $(CONTENTS)/MacOS $(CONTENTS)/Resources; \
+	cp $$BIN/$(APP_NAME) $(CONTENTS)/MacOS/$(APP_NAME); \
+	cp Resources/Info.plist $(CONTENTS)/Info.plist; \
+	cp Resources/AppIcon.icns $(CONTENTS)/Resources/AppIcon.icns; \
+	echo "Built universal ./$(APP_BUNDLE) ($$(lipo -archs $(CONTENTS)/MacOS/$(APP_NAME)))"
+
 ## Launch the assembled app.
 run: app
 	open $(APP_BUNDLE)
@@ -35,6 +46,10 @@ run: app
 ## Print the SMC temperature sensors found on this machine.
 sensors: build
 	$(BUILD_DIR)/$(APP_NAME) --list-sensors
+
+## Print the SMC power (watt) sensors (use to port PowerReader to a new model).
+power: build
+	$(BUILD_DIR)/$(APP_NAME) --list-power
 
 ## Copy the app into /Applications.
 install: app
