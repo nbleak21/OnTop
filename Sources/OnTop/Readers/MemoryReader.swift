@@ -38,7 +38,7 @@ final class MemoryReader: StatReader {
         let pct = totalBytes > 0 ? (used / totalBytes) * 100 : 0
         let gb = 1024.0 * 1024.0 * 1024.0
         return StatReading(
-            barText: String(format: "%.0f%%", pct),
+            barText: String(format: "%3.0f%%", pct),
             menuValue: String(format: "%.0f%%  ·  %.1f / %.0f GB", pct, used / gb, totalBytes / gb)
         )
     }

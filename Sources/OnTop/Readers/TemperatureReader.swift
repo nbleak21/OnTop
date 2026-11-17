@@ -27,7 +27,7 @@ final class TemperatureReader: StatReader {
                 let avg = values.reduce(0, +) / Double(values.count)
                 let peak = values.max() ?? avg
                 return StatReading(
-                    barText: String(format: "%.0f°", avg),
+                    barText: String(format: "%2.0f°", avg),
                     menuValue: String(format: "%.0f°C avg  ·  %.0f°C peak", avg, peak)
                 )
             }

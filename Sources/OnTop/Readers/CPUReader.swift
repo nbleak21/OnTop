@@ -51,7 +51,7 @@ final class CPUReader: StatReader {
 
         let pct = counted > 0 ? (busyFraction / Double(counted)) * 100 : 0
         return StatReading(
-            barText: String(format: "%.0f%%", pct),
+            barText: String(format: "%3.0f%%", pct),
             menuValue: String(format: "%.0f%%  ·  %d cores", pct, Int(cpuCount))
         )
     }

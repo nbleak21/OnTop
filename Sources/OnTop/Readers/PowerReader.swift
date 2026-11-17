@@ -25,7 +25,7 @@ final class PowerReader: StatReader {
             return StatReading(barText: "—", menuValue: "unavailable")
         }
         return StatReading(
-            barText: String(format: "%.0fW", watts),
+            barText: String(format: "%3.0fW", watts),
             menuValue: String(format: "%.1f W  ·  system total", watts)
         )
     }

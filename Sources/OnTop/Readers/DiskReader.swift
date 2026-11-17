@@ -25,7 +25,7 @@ final class DiskReader: StatReader {
         let gb = 1_000_000_000.0  // Finder reports disk sizes in decimal GB
 
         return StatReading(
-            barText: String(format: "%.0f%%", pct),
+            barText: String(format: "%3.0f%%", pct),
             menuValue: String(format: "%.0f%%  ·  %.0f / %.0f GB used", pct, used / gb, totalD / gb)
         )
     }

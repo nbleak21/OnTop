@@ -19,7 +19,7 @@ final class GPUReader: StatReader {
         let renderer = intValue(stats, "Renderer Utilization %") ?? 0
 
         return StatReading(
-            barText: String(format: "%d%%", device),
+            barText: String(format: "%3d%%", device),
             menuValue: String(format: "%d%%  ·  tiler %d%%  render %d%%", device, tiler, renderer)
         )
     }

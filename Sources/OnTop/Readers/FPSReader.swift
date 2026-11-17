@@ -63,7 +63,7 @@ final class FPSReader: StatReader {
         lastTime = now
 
         return StatReading(
-            barText: String(format: "%.0f", fps),
+            barText: String(format: "%3.0f", fps),
             menuValue: String(format: "%.0f fps  ·  display refresh", fps)
         )
     }
