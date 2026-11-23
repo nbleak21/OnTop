@@ -1,3 +1,6 @@
+// Copyright (c) 2026 OnTop contributors
+// SPDX-License-Identifier: MIT
+
 import AppKit
 import ServiceManagement
 

@@ -1,3 +1,6 @@
+// Copyright (c) 2026 OnTop contributors
+// SPDX-License-Identifier: MIT
+
 import AppKit
 
 // Diagnostic: print the SMC temperature sensors discovered on this machine.

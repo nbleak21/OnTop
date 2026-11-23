@@ -1,3 +1,6 @@
+// Copyright (c) 2026 OnTop contributors
+// SPDX-License-Identifier: MIT
+
 import Foundation
 
 /// Full system power draw in watts, from the SMC's main DC rail sensor.

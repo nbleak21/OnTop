@@ -1,3 +1,6 @@
+// Copyright (c) 2026 OnTop contributors
+// SPDX-License-Identifier: MIT
+
 // Generates OnTop's app icon as an .iconset of PNGs, drawn with CoreGraphics.
 // Usage: swift Tools/make_icon.swift [output.iconset]
 // Then:  iconutil -c icns <output.iconset> -o Resources/AppIcon.icns

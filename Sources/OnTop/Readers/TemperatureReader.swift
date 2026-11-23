@@ -1,3 +1,6 @@
+// Copyright (c) 2026 OnTop contributors
+// SPDX-License-Identifier: MIT
+
 import Foundation
 
 /// CPU temperature from the SMC. Discovers sensor keys once, then reads only

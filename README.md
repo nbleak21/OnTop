@@ -134,9 +134,12 @@ Sources/OnTop/
   Readers/
     MemoryReader.swift
     CPUReader.swift
+    GPUReader.swift
+    PowerReader.swift
     TemperatureReader.swift
     DiskReader.swift
     NetworkReader.swift
+    FPSReader.swift
 ```
 
 ## Roadmap
